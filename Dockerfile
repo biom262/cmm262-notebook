@@ -63,6 +63,10 @@ RUN mamba env create --file /tmp/variant_calling.yml
 COPY programming-R.yaml /tmp
 RUN mamba env create --file /tmp/programming-R.yaml
 
+# create rna-seq conda environment with required R packages 
+COPY rna-seq.yaml /tmp
+RUN mamba env create --file /tmp/rna-seq.yaml
+
 RUN yes | unminimize || echo "done"
 
 USER $NB_USER
