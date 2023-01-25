@@ -67,6 +67,9 @@ RUN mamba env create --file /tmp/programming-R.yaml
 COPY rna-seq.yaml /tmp
 RUN mamba env create --file /tmp/rna-seq.yaml
 
+COPY chipseq.yml /tmp
+RUN mamba env create --file /tmp/chipseq.yml
+
 RUN yes | unminimize || echo "done"
 
 USER $NB_USER
