@@ -22,8 +22,8 @@ RUN apt-get update && \
                     tree \
                     -y
 
-# RUN conda config --set channel_priority strict && \
-RUN mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
+RUN conda config --set channel_priority strict && \
+    mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
 # create scanpy_2021 conda environment with required python packages
 COPY scanpy_2021.yaml /tmp
