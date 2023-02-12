@@ -22,29 +22,37 @@ RUN apt-get update && \
                     tree \
                     -y
 
-RUN mamba install -c conda-forge bash_kernel nb_conda_kernels
+# RUN conda config --set channel_priority strict && \
+RUN mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
 # create scanpy_2021 conda environment with required python packages
 COPY scanpy_2021.yaml /tmp
-RUN mamba env create --file /tmp/scanpy_2021.yaml
+RUN mamba env create --file /tmp/scanpy_2021.yaml && \
+    mamba clean -afy
 
 COPY variant_calling.yml /tmp
-RUN mamba env create --file /tmp/variant_calling.yml
+RUN mamba env create --file /tmp/variant_calling.yml && \
+    mamba clean -afy
 
 COPY programming-R.yaml /tmp
-RUN mamba env create --file /tmp/programming-R.yaml
+RUN mamba env create --file /tmp/programming-R.yaml && \
+    mamba clean -afy
 
 COPY chipseq.yml /tmp
-RUN mamba env create --file /tmp/chipseq.yml
+RUN mamba env create --file /tmp/chipseq.yml && \
+    mamba clean -afy
 
 COPY gwas.yml /tmp
-RUN mamba env create --file /tmp/gwas.yml
+RUN mamba env create --file /tmp/gwas.yml && \
+    mamba clean -afy
 
 COPY stats.yml /tmp
-RUN mamba env create --file /tmp/stats.yml
+RUN mamba env create --file /tmp/stats.yml && \
+    mamba clean -afy
 
 COPY spatial-tx.yml /tmp
-RUN mamba env create --file /tmp/spatial-tx.yml
+RUN mamba env create --file /tmp/spatial-tx.yml && \
+    mamba clean -afy
 
 RUN yes | unminimize || echo "done"
 
