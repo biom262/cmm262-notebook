@@ -46,6 +46,10 @@ RUN mamba env create --file /tmp/stats.yml
 COPY spatial-tx.yml /tmp
 RUN mamba env create --file /tmp/spatial-tx.yml
 
+COPY imgproc.yml /tmp
+RUN mamba env create --file /tmp/imgproc.yml && \
+    mamba clean -afy
+
 RUN yes | unminimize || echo "done"
 
 USER $NB_USER
