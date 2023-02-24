@@ -57,8 +57,8 @@ RUN mamba env create -p /opt/env --copy --file /locks/stats-conda-lock.yml && \
 # RUN mamba env create --file /tmp/variant_calling.yml && \
 #     mamba clean -afy
 
-FROM ucsdets/datahub-base-notebook:2023.1-stable
-COPY --from=build /opt/env /opt/env
+# FROM ucsdets/datahub-base-notebook:2023.1-stable
+# COPY --from=build /opt/env /opt/env
 
 RUN yes | unminimize || echo "done"
 
