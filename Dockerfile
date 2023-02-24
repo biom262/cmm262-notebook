@@ -48,6 +48,10 @@ RUN mamba env create --file /tmp/stats.yml && \
 COPY imgproc.yml /tmp
 RUN mamba env create --file /tmp/imgproc.yml && \
     mamba clean -afy
+    
+COPY rna-seq.yaml /tmp
+RUN mamba env create --file /tmp/rna-seq.yaml && \
+    mamba clean -afy
 
 COPY spatial-tx.yml /tmp
 RUN mamba env create --file /tmp/spatial-tx.yml && \
