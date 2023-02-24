@@ -40,8 +40,11 @@ RUN mamba env create --file /tmp/chipseq.yml
 COPY gwas.yml /tmp
 RUN mamba env create --file /tmp/gwas.yml
 
-COPY stats.yml /tmp
-RUN mamba env create --file /tmp/stats.yml
+
+# create stats env with conda lock
+COPY stats-linux-64.lock /tmp
+RUN mamba env create --file /tmp/stats-linux-64.lock && \
+    mamba clean -afy
 
 COPY spatial-tx.yml /tmp
 RUN mamba env create --file /tmp/spatial-tx.yml
