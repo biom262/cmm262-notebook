@@ -43,8 +43,7 @@ RUN mamba env create --file /tmp/gwas.yml
 
 # create stats env with conda lock
 COPY stats-linux-64.lock /tmp
-RUN mamba env create --file /tmp/stats-linux-64.lock && \
-    mamba clean -afy
+RUN mamba env create --file /tmp/stats-linux-64.lock
 
 COPY spatial-tx.yml /tmp
 RUN mamba env create --file /tmp/spatial-tx.yml
