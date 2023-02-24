@@ -6,8 +6,8 @@ RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' \
         /etc/dpkg/dpkg.cfg.d/excludes
 
 # install linux packages
-RUN apt-get update && \
-    apt-get install tk-dev \
+RUN apt-get update && apt-get install -y \
+                    tk-dev \
                     tcl-dev \
                     cmake \
                     wget \
@@ -20,7 +20,7 @@ RUN apt-get update && \
                     man-db \
                     manpages-posix \
                     tree \
-                    -y
+                    && rm -rf /var/lib/apt/lists/*
 
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
