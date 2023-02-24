@@ -38,7 +38,7 @@ RUN mamba env create --file /tmp/gwas.yml && \
     mamba clean -afy
 
 COPY stats-conda-lock.yml /tmp
-RUN mamba env create --file --name stats /tmp/stats-conda-lock.yml && \
+RUN mamba env create --name stats --yes --file /tmp/stats-conda-lock.yml && \
     mamba clean -afy
 
 # COPY scrna-seq.yaml /tmp
