@@ -1,12 +1,11 @@
-
 name: Docker
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
-# documentation.
+# documentation. 
 
-on:
+on: 
   push:
     branches: [ "master" ]
     paths-ignore:
@@ -19,22 +18,23 @@ on:
     paths-ignore:
       - 'README.md'
       - '*.yaml'
-  
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  multi-state-build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
+    strategy:
+      matrix:
+        stage: ['build', 'release']
     steps:
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Log in to the Container registry
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
@@ -42,24 +42,37 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      # Extract metadata (tags, labels) for Docker
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      - name: prune
+
+      # Prune system
+      - name: Prune
         run: docker system prune -af
 
+      # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: true
+          file: Dockerfile
+          cache-from: type=gha
+          multi-state-build: true 
+          stages:
+            - 'build'
+            - 'release'
+          build-args-per-stage:
+            build:
+              - CONTINUUMIO_MINICONDA_VERSION=latest
+            release:
+              - CONTINUUMIO_MINICONDA_VERSION=stable
+          auto-prune: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          
