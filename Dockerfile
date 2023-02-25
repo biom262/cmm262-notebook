@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN conda config --set channel_priority strict && \
-    mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
+    mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock
 
 # COPY programming-R.yaml /tmp
 # RUN mamba env create --file /tmp/programming-R.yaml && \
@@ -38,7 +38,7 @@ RUN conda config --set channel_priority strict && \
 #     mamba clean -afy
 
 COPY stats.conda-lock.yml /tmp
-RUN mamba create --yes --file /tmp/stats.conda-lock.yml 
+RUN conda-lock install -n stats --file /tmp/stats.conda-lock.yml
 
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
