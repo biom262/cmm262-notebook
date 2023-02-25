@@ -26,18 +26,18 @@ RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock
 
 COPY programming-R.yml /tmp
-RUN mamba env create --file /tmp/programming-R.yaml && \
+RUN mamba env create --file /tmp/programming-R.yml && \
     mamba clean -afy
 
 COPY chipseq.yml /tmp
 RUN mamba env create --file /tmp/chipseq.yml && \
     mamba clean -afy
 
-COPY gwas.conda-lock.yml /tmp
+COPY /cl-env/gwas.conda-lock.yml /tmp
 RUN conda-lock install -n gwas /tmp/gwas.conda-lock.yml && \
     mamba clean -afy
 
-COPY stats.conda-lock.yml /tmp
+COPY /cl-env/stats.conda-lock.yml /tmp
 RUN conda-lock install -n stats /tmp/stats.conda-lock.yml && \
     mamba clean -afy
 
@@ -45,12 +45,12 @@ RUN conda-lock install -n stats /tmp/stats.conda-lock.yml && \
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
 #     mamba clean -afy
 
-COPY imgproc.conda-lock.yml /tmp
-RUN mconda-lock install -n imgproc /tmp/imgproc.conda-lock.yml && \
+COPY /cl-env/imgproc.conda-lock.yml /tmp
+RUN conda-lock install -n imgproc /tmp/imgproc.conda-lock.yml && \
     mamba clean -afy
     
-COPY rna-seq.yaml /tmp
-RUN mamba env create --file /tmp/rna-seq.yaml && \
+COPY rna-seq.yml /tmp
+RUN mamba env create --file /tmp/rna-seq.yml && \
     mamba clean -afy
 
 COPY spatial-tx.yml /tmp
