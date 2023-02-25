@@ -22,7 +22,6 @@ RUN apt-get update && apt-get install -y \
     tree=1.8.0-1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY stats-conda-lock.yml /tmp
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
@@ -38,8 +37,8 @@ RUN conda config --set channel_priority strict && \
 # RUN mamba env create --file /tmp/gwas.yml && \
 #     mamba clean -afy
 
-COPY stats-conda-lock.yml /tmp
-RUN conda create -p /opt/env --copy --file /tmp/stats-conda-lock.yml
+COPY stats.lock /tmp/stats.lock
+RUN mamba env create --file /tmp/stats.lock
 
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
