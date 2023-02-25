@@ -37,8 +37,8 @@ RUN conda config --set channel_priority strict && \
 # RUN mamba env create --file /tmp/gwas.yml && \
 #     mamba clean -afy
 
-COPY stats.lock /tmp
-RUN mamba env create --file /tmp/stats.lock
+COPY stats.conda-lock.yml /tmp
+RUN mamba env create --file /tmp/stats.conda-lock.yml
 
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
