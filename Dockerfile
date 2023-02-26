@@ -31,7 +31,7 @@ COPY rna-seq.yml /tmp/rna-seq.yml
 COPY spatial-tx.yml /tmp/spatial-tx.yml
 
 RUN conda config --set channel_priority strict && \
-    mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock && \
+mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock && \
 conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml && \
 conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
 conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \
