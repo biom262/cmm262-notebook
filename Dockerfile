@@ -41,8 +41,7 @@ RUN conda config --set channel_priority strict && \
 #     mamba clean -afy
 
 
-RUN conda-lock install -n stats /tmp/stats.conda-lock.yml && \
-    mamba clean -afy
+RUN conda-lock install -n stats /tmp/stats.conda-lock.yml && mamba clean -afy
 
 
 #UNCOMMENT THIS AFTER to attempt multipe 
