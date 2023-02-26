@@ -32,13 +32,13 @@ COPY spatial-tx.yml /tmp/spatial-tx.yml
 
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock && \
-    conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml && \
-    conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
-    conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \
-    conda-lock lock --platform linux-64 --file /tmp/programming-R.yml --kind lock --lockfile /tmp/programming-R-conda-lock.yml && \
-    conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml && \
-    conda-lock lock --platform linux-64 --file /tmp/rna-seq.yml --kind lock --lockfile /tmp/rna-seq-conda-lock.yml && \
-    conda-lock lock --platform linux-64 --file /tmp/spatial-tx.yml --kind lock --lockfile /tmp/spatial-tx-conda-lock.yml
+conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml && \
+conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
+conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \
+conda-lock lock --platform linux-64 --file /tmp/programming-R.yml --kind lock --lockfile /tmp/programming-R-conda-lock.yml && \
+conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml && \
+conda-lock lock --platform linux-64 --file /tmp/rna-seq.yml --kind lock --lockfile /tmp/rna-seq-conda-lock.yml && \
+conda-lock lock --platform linux-64 --file /tmp/spatial-tx.yml --kind lock --lockfile /tmp/spatial-tx-conda-lock.yml
 
 
 # 
