@@ -36,9 +36,10 @@ conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile
 conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
 conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \
 conda-lock lock --platform linux-64 --file /tmp/programming-R.yml --kind lock --lockfile /tmp/programming-R-conda-lock.yml && \
-conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml && \
 conda-lock lock --platform linux-64 --file /tmp/rna-seq.yml --kind lock --lockfile /tmp/rna-seq-conda-lock.yml && \
 conda-lock lock --platform linux-64 --file /tmp/spatial-tx.yml --kind lock --lockfile /tmp/spatial-tx-conda-lock.yml
+
+#conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml && \
 
 
 # 
@@ -71,7 +72,7 @@ RUN conda-lock install -n imgproc /tmp/imgproc-conda-lock.yml && mamba clean -af
 
 RUN conda-lock install -n programming-R /tmp/programming-R-conda-lock.yml && mamba clean -afy
 
-RUN conda-lock install -n chipseq /tmp/chipseq-conda-lock.yml && mamba clean -afy
+#RUN conda-lock install -n chipseq /tmp/chipseq-conda-lock.yml && mamba clean -afy
 
 RUN conda-lock install -n rna-seq /tmp/rna-seq-conda-lock.yml && mamba clean -afy
 
