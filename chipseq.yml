@@ -9,6 +9,6 @@ dependencies:
   - bioconda::samtools==1.11
   - conda-forge::python=3.8
   - conda-forge::ipykernel==5.5.0
-  - conda-forge::matplotlib-base==3.62
   - conda-forge::pandas==1.5.2
   - conda-forge::ipyigv==0.1.9
+  - conda-forge::matplotlib-base==3.62
