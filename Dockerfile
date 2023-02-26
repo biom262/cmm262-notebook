@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY /original-env/stats.yml /tmp/stats.yml
 COPY /original-env/gwas.yml /tmp/gwas.yml
-COPY /original/imgproc.yml  /tmp/imgproc.yml
+COPY /original-env/imgproc.yml /tmp/imgproc.yml
 
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock && \
