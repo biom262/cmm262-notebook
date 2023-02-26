@@ -29,7 +29,7 @@ RUN conda config --set channel_priority strict && \
     conda-lock lock \
         --platform linux-64 \
         --file /tmp/stats.yml \ 
-        --kinda lock \
+        --kind lock \
         --lockfile /tmp/stats-conda-lock.yml
 
 # COPY programming-R.yml /tmp
