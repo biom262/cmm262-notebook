@@ -26,11 +26,7 @@ COPY /original-env/stats.yml /tmp/stats.yml
 
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock && \
-    conda-lock lock \
-        --platform linux-64 \
-        --file /tmp/stats.yml \ 
-        --kind lock \
-        --lockfile /tmp/stats-conda-lock.yml
+    conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml
 
 # COPY programming-R.yml /tmp
 # RUN mamba env create --file /tmp/programming-R.yml && \
