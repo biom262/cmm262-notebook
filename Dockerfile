@@ -22,40 +22,56 @@ RUN apt-get update && apt-get install -y \
     tree=1.8.0-1 \
     && rm -rf /var/lib/apt/lists/*
 
+COPY /original-env/stats.yml /tmp/stats.yml
+
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock
+    && conda-lock \
+        --platform linux-64 \
+        --file /tmp/stats.yml \ 
+        --kinda lock \
+        --lockfile /tmp/stats-conda-lock.yml
 
-COPY programming-R.yml /tmp
-RUN mamba env create --file /tmp/programming-R.yml && \
+# COPY programming-R.yml /tmp
+# RUN mamba env create --file /tmp/programming-R.yml && \
+#     mamba clean -afy
+
+# COPY chipseq.yml /tmp
+# RUN mamba env create --file /tmp/chipseq.yml && \
+#     mamba clean -afy
+
+# COPY /cl-env/gwas.conda-lock.yml /tmp
+# RUN conda-lock install -n gwas /tmp/gwas.conda-lock.yml && \
+#     mamba clean -afy
+
+
+RUN conda-lock install -n stats --file /tmp/stats.conda-lock.yml && \
     mamba clean -afy
 
-COPY chipseq.yml /tmp
-RUN mamba env create --file /tmp/chipseq.yml && \
-    mamba clean -afy
 
-COPY /cl-env/gwas.conda-lock.yml /tmp
-RUN conda-lock install -n gwas /tmp/gwas.conda-lock.yml && \
-    mamba clean -afy
-
-COPY /cl-env/stats.conda-lock.yml /tmp
-RUN conda-lock install -n stats /tmp/stats.conda-lock.yml && \
-    mamba clean -afy
+#UNCOMMENT THIS AFTER to attempt multipe 
+# RUN conda-lock install \
+#     --mamba \
+#     --copy \ 
+#     --prefix /opt/env \
+#     /tmp/stats.conda-lock.yml && \
+#     mamba clean -afy
 
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
 #     mamba clean -afy
 
-COPY /cl-env/imgproc.conda-lock.yml /tmp
-RUN conda-lock install -n imgproc /tmp/imgproc.conda-lock.yml && \
-    mamba clean -afy
+# COPY /cl-env/imgproc.conda-lock.yml /tmp
+# RUN conda-lock install -n imgproc /tmp/imgproc.conda-lock.yml && \
+#     mamba clean -afy
     
-COPY rna-seq.yml /tmp
-RUN mamba env create --file /tmp/rna-seq.yml && \
-    mamba clean -afy
+# COPY rna-seq.yml /tmp
+# RUN mamba env create --file /tmp/rna-seq.yml && \
+#     mamba clean -afy
 
-COPY spatial-tx.yml /tmp
-RUN mamba env create --file /tmp/spatial-tx.yml && \
-    mamba clean -afy
+# COPY spatial-tx.yml /tmp
+# RUN mamba env create --file /tmp/spatial-tx.yml && \
+#     mamba clean -afy
 
 # COPY variant_calling.yml /tmp
 # RUN mamba env create --file /tmp/variant_calling.yml && \
