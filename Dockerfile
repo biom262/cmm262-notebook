@@ -23,10 +23,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY /original-env/stats.yml /tmp/stats.yml
+COPY /original-env/gwas.yml /tmp/gwas.yml
+COPY /original/imgproc.yml  /tmp/imgproc.yml
 
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock && \
-    conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml
+    conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml && \
+    conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
+    conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml
 
 # COPY programming-R.yml /tmp
 # RUN mamba env create --file /tmp/programming-R.yml && \
@@ -36,13 +40,11 @@ RUN conda config --set channel_priority strict && \
 # RUN mamba env create --file /tmp/chipseq.yml && \
 #     mamba clean -afy
 
-# COPY /cl-env/gwas.conda-lock.yml /tmp
-# RUN conda-lock install -n gwas /tmp/gwas.conda-lock.yml && \
-#     mamba clean -afy
-
-
 RUN conda-lock install -n stats /tmp/stats-conda-lock.yml && mamba clean -afy
 
+# COPY /cl-env/gwas.conda-lock.yml /tmp
+RUN conda-lock install -n gwas /tmp/gwas-conda-lock.yml && mamba clean -afy
+#     mamba clean -afy
 
 #UNCOMMENT THIS AFTER to attempt multipe 
 # RUN conda-lock install \
@@ -56,9 +58,8 @@ RUN conda-lock install -n stats /tmp/stats-conda-lock.yml && mamba clean -afy
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
 #     mamba clean -afy
 
-# COPY /cl-env/imgproc.conda-lock.yml /tmp
-# RUN conda-lock install -n imgproc /tmp/imgproc.conda-lock.yml && \
-#     mamba clean -afy
+
+RUN conda-lock install -n imgproc /tmp/imgproc-conda-lock.yml && mamba clean -afy
     
 # COPY rna-seq.yml /tmp
 # RUN mamba env create --file /tmp/rna-seq.yml && \
