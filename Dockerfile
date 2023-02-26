@@ -1,4 +1,4 @@
-FROM ucsdets/datahub-base-notebook:2023.1-stable
+FROM ucsdets/datahub-base-notebook:2023.1-stable as build
 
 USER root
 
@@ -22,38 +22,38 @@ RUN apt-get update && apt-get install -y \
     tree=1.8.0-1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY /original-env/stats.yml /tmp/stats.yml
-COPY /original-env/gwas.yml /tmp/gwas.yml
-COPY /original-env/imgproc.yml /tmp/imgproc.yml
-COPY programming-R.yml /tmp/programming-R.yml
-COPY chipseq.yml /tmp/chipseq.yml
-COPY rna-seq.yml /tmp/rna-seq.yml
-COPY spatial-tx.yml /tmp/spatial-tx.yml
+
 
 RUN conda config --set channel_priority strict && \
-mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock && \
-conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml && \
-conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
-conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \
-conda-lock lock --platform linux-64 --file /tmp/programming-R.yml --kind lock --lockfile /tmp/programming-R-conda-lock.yml && \
-conda-lock lock --platform linux-64 --file /tmp/rna-seq.yml --kind lock --lockfile /tmp/rna-seq-conda-lock.yml && \
-conda-lock lock --platform linux-64 --file /tmp/spatial-tx.yml --kind lock --lockfile /tmp/spatial-tx-conda-lock.yml
+mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock 
+
+FROM build as build1
+COPY /original-env/stats.yml /tmp/stats.yml
+conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml 
+# && \
+# conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
+# conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \
+# conda-lock lock --platform linux-64 --file /tmp/programming-R.yml --kind lock --lockfile /tmp/programming-R-conda-lock.yml && \
+# conda-lock lock --platform linux-64 --file /tmp/rna-seq.yml --kind lock --lockfile /tmp/rna-seq-conda-lock.yml && \
+# conda-lock lock --platform linux-64 --file /tmp/spatial-tx.yml --kind lock --lockfile /tmp/spatial-tx-conda-lock.yml
 
 #conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml && \
 
 
-# 
-# RUN mamba env create --file /tmp/spatial-tx.yml && \
-#     mamba clean -afy
 
-# 
-# conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml
+# COPY /original-env/gwas.yml /tmp/gwas.yml
+# COPY /original-env/imgproc.yml /tmp/imgproc.yml
+# COPY programming-R.yml /tmp/programming-R.yml
+# COPY chipseq.yml /tmp/chipseq.yml
+# COPY rna-seq.yml /tmp/rna-seq.yml
+# COPY spatial-tx.yml /tmp/spatial-tx.yml
 
-
-RUN conda-lock install -n stats /tmp/stats-conda-lock.yml && mamba clean -afy
-
-RUN conda-lock install -n gwas /tmp/gwas-conda-lock.yml && mamba clean -afy
-
+# RUN conda-lock install -n stats /tmp/stats-conda-lock.yml && mamba clean -afy
+# RUN conda-lock install -n gwas /tmp/gwas-conda-lock.yml && mamba clean -afy
+# RUN conda-lock install -n imgproc /tmp/imgproc-conda-lock.yml && mamba clean -afy
+# RUN conda-lock install -n programming-R /tmp/programming-R-conda-lock.yml && mamba clean -afy
+# RUN conda-lock install -n rna-seq /tmp/rna-seq-conda-lock.yml && mamba clean -afy
+# RUN conda-lock install -n spatialtx /tmp/spatial-tx-conda-lock.yml && mamba clean -afy
 
 
 #UNCOMMENT THIS AFTER to attempt multipe 
@@ -68,15 +68,9 @@ RUN conda-lock install -n gwas /tmp/gwas-conda-lock.yml && mamba clean -afy
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
 #     mamba clean -afy
 
-RUN conda-lock install -n imgproc /tmp/imgproc-conda-lock.yml && mamba clean -afy
-
-RUN conda-lock install -n programming-R /tmp/programming-R-conda-lock.yml && mamba clean -afy
-
 #RUN conda-lock install -n chipseq /tmp/chipseq-conda-lock.yml && mamba clean -afy
 
-RUN conda-lock install -n rna-seq /tmp/rna-seq-conda-lock.yml && mamba clean -afy
 
-RUN conda-lock install -n spatialtx /tmp/spatial-tx-conda-lock.yml && mamba clean -afy
 # COPY variant_calling.yml /tmp
 # RUN mamba env create --file /tmp/variant_calling.yml && \
 #     mamba clean -afy
