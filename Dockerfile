@@ -70,7 +70,7 @@ RUN conda-lock install -n gwas /tmp/gwas-conda-lock.yml && mamba clean -afy
 RUN conda-lock install -n imgproc /tmp/imgproc-conda-lock.yml && mamba clean -afy
 
 RUN conda-lock install -n programming-R /tmp/programming-R-conda-lock.yml && mamba clean -afy
-    
+
 RUN conda-lock install -n chipseq /tmp/chipseq-conda-lock.yml && mamba clean -afy
 
 RUN conda-lock install -n rna-seq /tmp/rna-seq-conda-lock.yml && mamba clean -afy
