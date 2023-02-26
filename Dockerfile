@@ -29,7 +29,7 @@ mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda
 
 FROM build as build1
 COPY /original-env/stats.yml /tmp/stats.yml
-conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml 
+RUN conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml 
 # && \
 # conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
 # conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \
