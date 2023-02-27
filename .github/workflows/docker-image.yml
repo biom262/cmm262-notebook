@@ -66,9 +66,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: |
-            type=gha,scope=base
+            type=gha,mode=max
           cache-to: |
-            type=gha,scope=base,mode=max
+            type=gha,mode=max
           target: base
 
       - name: Build and push Docker image
@@ -80,7 +80,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=gha, scope=base
+            type=gha,mode=max
           cache-to: |
-            type=gha,scope=build1,mode=max
+            type=gha,mode=max
           target: build1
