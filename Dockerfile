@@ -79,7 +79,6 @@ ENV PATH="/opt/env/bin:${PATH}"
 #     mamba clean -afy
 
 
-
 # COPY variant_calling.yml /tmp
 # RUN mamba env create --file /tmp/variant_calling.yml && \
 #     mamba clean -afy
