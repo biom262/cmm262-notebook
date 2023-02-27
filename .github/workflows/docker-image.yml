@@ -49,7 +49,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: prune
         run: docker system prune -af
 
