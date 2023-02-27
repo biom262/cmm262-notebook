@@ -10,7 +10,7 @@ mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda
 
 COPY /env/stats.yml /tmp/stats.yml
 RUN conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml
-RUN conda-lock --mamba --copy --prefix /opt/stats /tmp/stats-conda-lock.yml
+RUN conda-lock install --mamba --copy --prefix /opt/stats /tmp/stats-conda-lock.yml
 #RUN conda-lock install -n stats /tmp/stats-conda-lock.yml 
 #&& mamba clean -afy && \
 
