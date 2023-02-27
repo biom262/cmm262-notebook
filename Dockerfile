@@ -59,8 +59,8 @@ RUN conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lo
 # conda-lock lock --platform linux-64 --file /tmp/spatial-tx.yml --kind lock --lockfile /tmp/spatial-tx-conda-lock.yml && \
 # conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml
 
-RUN conda-lock install --mamba --copy --prefix /opt/env /tmp/stats-conda-lock.yml && mamba clean -afy && \
-conda-lock install --mamba --copy --prefix /opt/env /tmp/chipseq-conda-lock.yml && mamba clean -afy
+RUN conda-lock install -n stats /tmp/stats-conda-lock.yml && mamba clean -afy && \
+conda-lock install -n chipseq /tmp/chipseq-conda-lock.yml && mamba clean -afy
 # RUN conda-lock install -n gwas /tmp/gwas-conda-lock.yml && mamba clean -afy
 # RUN conda-lock install -n imgproc /tmp/imgproc-conda-lock.yml && mamba clean -afy
 # RUN conda-lock install -n programming-R /tmp/programming-R-conda-lock.yml && mamba clean -afy
@@ -72,13 +72,10 @@ conda-lock install --mamba --copy --prefix /opt/env /tmp/chipseq-conda-lock.yml 
 # Primary container
 # -----------------
 FROM build1 as test
-COPY --from=build1 /opt/env /opt/env
-ENV PATH="/opt/env/bin:${PATH}"
+#ENV PATH="/opt/env/bin:${PATH}"
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
 #     mamba clean -afy
-
-
 # COPY variant_calling.yml /tmp
 # RUN mamba env create --file /tmp/variant_calling.yml && \
 #     mamba clean -afy
