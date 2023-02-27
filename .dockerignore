@@ -1,6 +1,3 @@
 # Ignore everything except the Dockerfile
-cl-env/
 README.md
 !Dockerfile
-original-env/gwas.yml  
-original-env/imgproc.yml 

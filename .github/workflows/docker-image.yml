@@ -57,22 +57,22 @@ jobs:
       - name: prune
         run: docker system prune -af
 
-      - name: Build base image
-        id: docker_build_base
+      - name: Build1 image
+        id: docker_build1
         uses: docker/build-push-action@v3
         with:
           context: .
           file: Dockerfile
-          push: true
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: |
-            type=gha
+            type=gha, scope=build1
           cache-to: |
-            type=gha,mode=max
-          target: base
+            type=gha,scope=build1,mode=max
+          target: build1
 
-      - name: Build and push Docker image
-        id: docker_build_build1
+      - name: Build and push final Docker image
+        id: docker_build_final
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -80,21 +80,21 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=gha
+            type=gha,scope=final
+            type=gha,scope=build1
           cache-to: |
-            type=gha,mode=max
+            type=gha,scope=final,mode=max
           target: build1
-
-      - name: Build test
-        id: docker_build_test
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: |
-            type=gha
-          cache-to: |
-            type=gha,mode=max
-          target: test   
+      # - name: Build test
+      #   id: docker_build_test
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     context: .
+      #     file: Dockerfile
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     cache-from: |
+      #       type=gha
+      #     cache-to: |
+      #       type=gha,mode=max
+      #     target: test   
