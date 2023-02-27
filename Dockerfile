@@ -72,7 +72,7 @@ conda-lock install --mamba --copy --prefix /opt/env /tmp/chipseq-conda-lock.yml 
 # Primary container
 # -----------------
 FROM build1 as test
-COPY --from=builder /opt/env /opt/env
+COPY --from=build1 /opt/env /opt/env
 ENV PATH="/opt/env/bin:${PATH}"
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
