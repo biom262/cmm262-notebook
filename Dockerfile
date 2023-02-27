@@ -4,6 +4,7 @@
 # -----------------
 
 FROM ucsdets/datahub-base-notebook:2023.1-stable as build1
+USER root
 
 RUN conda config --set channel_priority strict && \
 mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock 
@@ -64,7 +65,6 @@ RUN conda-lock install --mamba --copy --prefix /opt/stats /tmp/stats-conda-lock.
 # -----------------
 
 FROM ucsdets/datahub-base-notebook:2023.1-stable as final
-USER root
 
 RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' \
     /etc/dpkg/dpkg.cfg.d/excludes
