@@ -48,8 +48,8 @@ COPY chipseq.yml /tmp/chipseq.yml
 # COPY rna-seq.yml /tmp/rna-seq.yml
 # COPY spatial-tx.yml /tmp/spatial-tx.yml
 
-RUN conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml && \
-conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml
+RUN conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml
+RUN conda-lock lock --platform linux-64 --file /tmp/chipseq.yml --kind lock --lockfile /tmp/chipseq-conda-lock.yml
 
 #&& \
 # conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
