@@ -84,3 +84,17 @@ jobs:
           cache-to: |
             type=gha,mode=max
           target: build1
+
+      - name: Build test
+        id: docker_build_test
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: |
+            type=gha
+          cache-to: |
+            type=gha,mode=max
+          target: test   

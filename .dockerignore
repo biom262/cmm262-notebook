@@ -1,5 +1,4 @@
 # Ignore everything except the Dockerfile
-*.yml
 cl-env/
 README.md
 !Dockerfile
