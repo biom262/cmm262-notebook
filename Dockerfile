@@ -1,4 +1,4 @@
-FROM ucsdets/datahub-base-notebook:2023.1-stable as build
+FROM ucsdets/datahub-base-notebook:2023.1-stable as base
 
 USER root
 
@@ -27,9 +27,10 @@ RUN apt-get update && apt-get install -y \
 RUN conda config --set channel_priority strict && \
 mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock 
 
-FROM build as build1
+FROM base as build1
 COPY /original-env/stats.yml /tmp/stats.yml
-RUN conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml 
+RUN conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml && \
+conda-lock install -n stats /tmp/stats-conda-lock.yml && mamba clean -afy 
 # && \
 # conda-lock lock --platform linux-64 --file /tmp/gwas.yml --kind lock --lockfile /tmp/gwas-conda-lock.yml && \
 # conda-lock lock --platform linux-64 --file /tmp/imgproc.yml --kind lock --lockfile /tmp/imgproc-conda-lock.yml && \

@@ -53,12 +53,28 @@ jobs:
       - name: prune
         run: docker system prune -af
 
+      - name: Build base image
+        id: docker_build_base
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          cache-from: |
+            type=gha,scope=base
+          cache-to: |
+            type=gha,scope=base,mode=max
+          target: base
+
       - name: Build and push Docker image
+        id: docker_build_build1
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=gha, scope=base
+          cache-to: |
+            type=gha,scope=build1,mode=max
