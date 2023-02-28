@@ -11,7 +11,7 @@ mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda
 
 COPY /env/stats.yml /tmp/stats.yml
 RUN conda-lock lock --platform linux-64 --file /tmp/stats.yml --kind lock --lockfile /tmp/stats-conda-lock.yml
-RUN conda-lock install --mamba --copy --prefix /opt/stats /tmp/stats-conda-lock.yml
+RUN conda-lock install --mamba --copy --prefix /opt/env --file /tmp/stats-conda-lock.yml
 #RUN conda-lock install -n stats /tmp/stats-conda-lock.yml 
 #&& mamba clean -afy && \
 
@@ -87,7 +87,8 @@ RUN apt-get update && apt-get install -y \
     tree=1.8.0-1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build1 /opt/stats /opt/conda/envs/stats
+COPY --from=build1 /opt/env /opt/env
+#ENV PATH="/opt/env/bin:${PATH}"
 
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
