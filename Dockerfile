@@ -4,7 +4,7 @@
 # -----------------
 
 FROM ucsdets/datahub-base-notebook:2023.1-stable as build1
-USER root
+#USER root
 
 RUN conda config --set channel_priority strict && \
 mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock 
@@ -87,7 +87,7 @@ RUN apt-get update && apt-get install -y \
     tree=1.8.0-1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build1 /opt/stats /opt/conda/envs
+COPY --from=build1 /opt/stats /opt/conda/envs/stats
 #ENV PATH="/opt/conda/envs/bin:${PATH}"
 
 # COPY scrna-seq.yaml /tmp
