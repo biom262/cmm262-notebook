@@ -65,6 +65,7 @@ RUN conda-lock install --mamba --copy --prefix /opt/stats /tmp/stats-conda-lock.
 # -----------------
 
 FROM ucsdets/datahub-base-notebook:2023.1-stable as final
+USER root
 
 RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' \
     /etc/dpkg/dpkg.cfg.d/excludes
@@ -86,7 +87,7 @@ RUN apt-get update && apt-get install -y \
     tree=1.8.0-1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=buil1 /opt/stats /opt/conda/envs/stats
+COPY --from=build1 /opt/stats /opt/conda/envs/stats
 
 # COPY scrna-seq.yaml /tmp
 # RUN mamba env create --file /tmp/scrna-seq.yaml && \
