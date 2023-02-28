@@ -4,7 +4,7 @@
 # -----------------
 
 FROM ucsdets/datahub-base-notebook:2023.1-stable as build1
-#USER root
+USER root
 
 RUN conda config --set channel_priority strict && \
 mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels conda-lock 
