@@ -61,6 +61,10 @@ RUN mamba env create --file /tmp/spatial-tx.yml && \
 # RUN mamba env create --file /tmp/variant_calling.yml && \
 #     mamba clean -afy
 
+COPY networks.yml /tmp
+RUN mamba env create --file /tmp/networks.yml && \
+    mamba clean -afy
+
 RUN yes | unminimize || echo "done"
 
 USER $NB_USER
