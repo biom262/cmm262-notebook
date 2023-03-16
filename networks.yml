@@ -13,6 +13,6 @@ dependencies:
 - conda-forge::ipykernel==6.21.2
 - conda-forge::r-base==3.6.3
 - conda-forge::r-irkernel==1.1.1
-- bioconda::r-wgcna==1.71
+- bioconda::r-wgcna==1.69
 - pip:
   - statannot==0.2.3
