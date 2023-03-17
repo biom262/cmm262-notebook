@@ -16,5 +16,6 @@ dependencies:
 - conda-forge::r-irkernel==1.1.1
 - bioconda::r-wgcna==1.69
 - conda-forge::r-igraph==1.2.6
+- r::r-netindices==1.4.4
 - pip:
   - statannot==0.2.3
