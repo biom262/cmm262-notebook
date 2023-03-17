@@ -17,5 +17,6 @@ dependencies:
 - bioconda::r-wgcna==1.69
 - conda-forge::r-igraph==1.2.6
 - r::r-netindices==1.4.4
+- bioconda::bioconductor-org.mm.eg.db==3.10.0
 - pip:
   - statannot==0.2.3
