@@ -4,6 +4,7 @@ channels:
   - nodefaults
 dependencies:
   - conda-forge::python==3.7
+  - conda-forge::qt-main==5.15.8
   - conda-forge::pyqt==5.15.7
   - conda-forge::matplotlib==3.5.3
   - conda-forge::scikit-image==0.19.3
