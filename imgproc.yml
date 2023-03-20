@@ -12,10 +12,9 @@ dependencies:
   - conda-forge::pillow==9.2.0 # a dependency of pylattice
   - conda-forge::pims==0.6.1 # a dependency of pylattice
   - conda-forge::igraph==0.10.3 # a dependency of MitoTNT
-  - conda-forge::pytest==7.2.2 # a dependency of pylattice
   - conda-forge::tqdm==4.65.0 # a dependency of pylattice
   - conda-forge::sphinx_rtd_theme==1.2.0 # a dependency of pylattice
   - conda-forge::pip
   - pip:
     - pylattice # dependencies are not installed automatically but are listed in https://github.com/pylattice/pyLattice/blob/master/requirements.txt
-    - fastdist # a dependency of MitoTNT
+    - fastdist==1.1.5 # a dependency of MitoTNT
