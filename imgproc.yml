@@ -3,15 +3,15 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - conda-forge::python==3.8
+  - conda-forge::python==3.7
   - conda-forge::matplotlib==3.5.3
   - conda-forge::scikit-image==0.19.3
-  - conda-forge::numpy==1.21.6
-  - conda-forge::ipykernel==6.16.2
-  - conda-forge::pandas==1.3.5 # a dependency of pylattice
-  - conda-forge::pillow==9.2.0 # a dependency of pylattice
+  - conda-forge::numpy==1.24.2
+  - conda-forge::ipykernel==6.22.0
+  - conda-forge::pandas==1.5.3 # a dependency of pylattice
+  - conda-forge::pillow==9.4.0 # a dependency of pylattice
   - conda-forge::pims==0.6.1 # a dependency of pylattice
-  - conda-forge::igraph==0.10.3 # a dependency of MitoTNT
+  - conda-forge::igraph==0.10.4 # a dependency of MitoTNT
   - conda-forge::tqdm==4.65.0 # a dependency of pylattice
   - conda-forge::sphinx_rtd_theme==1.2.0 # a dependency of pylattice
   - conda-forge::pip
