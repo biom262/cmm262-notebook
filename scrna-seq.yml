@@ -13,6 +13,5 @@ dependencies:
   - conda-forge::python-igraph==0.9.9
   - conda-forge::leidenalg==0.8.9
   - conda-forge::ipykernel==6.9.1
-  - conda-forge::jupyterlab==3.2.9
   - conda-forge::scanpy==1.8.2
   - conda-forge::louvain==0.7.1
