@@ -14,5 +14,5 @@ dependencies:
   - conda-forge::pip==23.0.1
   - conda-forge::python-igraph==0.7.1.post7 # a dependency of MitoTNT
   - pip:
-    - pylattice # dependencies are not installed automatically but are listed in https://github.com/pylattice/pyLattice/blob/master/requirements.txt
+    - pylattice==0.1.3  # dependencies are not installed automatically but are listed in https://github.com/pylattice/pyLattice/blob/master/requirements.txt
     - fastdist==1.1.5 # a dependency of MitoTNT
