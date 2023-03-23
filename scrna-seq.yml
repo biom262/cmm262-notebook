@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - bioconda
   - nodefaults
- dependencies:
+dependencies:
   - conda-forge::python=3.8
   - conda-forge::seaborn==0.11.2
   - conda-forge::pytables==3.7.0
