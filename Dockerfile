@@ -41,9 +41,9 @@ COPY stats.yml /tmp
 RUN mamba env create --file /tmp/stats.yml && \
     mamba clean -afy
 
-# COPY scrna-seq.yaml /tmp
-# RUN mamba env create --file /tmp/scrna-seq.yaml && \
-#     mamba clean -afy
+COPY scrna-seq.yml /tmp
+RUN mamba env create --file /tmp/scrna-seq.yml && \
+    mamba clean -afy
 
 COPY imgproc.yml /tmp
 RUN mamba env create --file /tmp/imgproc.yml && \
