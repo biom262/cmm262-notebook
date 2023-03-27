@@ -64,6 +64,10 @@ RUN mamba env create --file /tmp/variant_calling.yml && \
 COPY networks.yml /tmp
 RUN mamba env create --file /tmp/networks.yml && \
     mamba clean -afy
+    
+COPY popgen.yml /tmp
+RUN mamba env create --file /tmp/popgen.yml && \
+    mamba clean -afy
 
 RUN yes | unminimize || echo "done"
 
