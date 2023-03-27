@@ -1,0 +1,6 @@
+name: popgen
+channels:
+- conda-forge
+- nodefaults
+dependencies:
+- conda-forge::r-data.table==1.14.8
