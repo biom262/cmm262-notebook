@@ -2,6 +2,8 @@ FROM ucsdets/datahub-base-notebook:2023.1-stable
 
 USER root
 
+ARG modulename
+
 RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' \
     /etc/dpkg/dpkg.cfg.d/excludes
 
@@ -25,8 +27,8 @@ RUN apt-get update && apt-get install -y \
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
-COPY programming-R.yaml /tmp
-RUN mamba env create --file /tmp/programming-R.yaml && \
+COPY ${modulename}.yml /tmp
+RUN mamba env create --file /tmp/${modulename}.yaml && \
     mamba clean -afy
 
 RUN yes | unminimize || echo "done"
