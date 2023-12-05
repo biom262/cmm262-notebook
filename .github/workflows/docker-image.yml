@@ -8,13 +8,7 @@ name: Docker
 
 on:
   push:
-    branches: [ "master", "*" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
-    paths-ignore:
-      - 'README.md'
-  pull_request:
-    branches: [ "*" ]
+    branches: [ "master" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths-ignore:
