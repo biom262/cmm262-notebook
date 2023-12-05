@@ -1,8 +1,34 @@
-FROM ucsdets/datahub-base-notebook:2023.1-stable
-
-USER root
+# BUILDER CONTAINER
+FROM condaforge/mambaforge:4.14.0-0 as builder
 
 ARG modulename
+
+COPY ${modulename}.yml /docker/environment.yml
+
+RUN . /opt/conda/etc/profile.d/conda.sh && \
+    mamba create --name lock && \
+    conda activate lock && \
+    mamba env list && \
+    mamba install --yes pip conda-lock>=1.2.2 setuptools wheel && \
+    conda-lock lock \
+        --platform linux-64 \
+        --file /docker/environment.yml \
+        --kind lock \
+        --lockfile /docker/conda-lock.yml
+
+RUN . /opt/conda/etc/profile.d/conda.sh && \
+    conda activate lock && \
+    conda-lock install \
+        --mamba \
+        --copy \
+        --prefix /opt/env \
+        /docker/conda-lock.yml
+
+
+# PRODUCTION (AKA PRIMARY) CONTAINER
+FROM ucsdets/datahub-base-notebook:2023.1-stable as primary
+
+USER root
 
 RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' \
     /etc/dpkg/dpkg.cfg.d/excludes
@@ -27,9 +53,7 @@ RUN apt-get update && apt-get install -y \
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
-COPY ${modulename}.yml /tmp
-RUN mamba env create --file /tmp/${modulename}.yaml && \
-    mamba clean -afy
+#KEEP THIS COMMENT LINE - it is replaced dynamically within github actions to install each of the modules
 
 RUN yes | unminimize || echo "done"
 

@@ -13,12 +13,19 @@ on:
     tags: [ 'v*.*.*' ]
     paths-ignore:
       - 'README.md'
+  pull_request:
+    branches: [ "*" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+    paths-ignore:
+      - 'README.md'
   
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
   metadata:
     runs-on: ubuntu-latest
     outputs:
@@ -37,8 +44,8 @@ jobs:
           # echo $modulenames | tr ' ' '\n' | sed 's/^/type=gha,scope=builder-/' | paste -s
           matrix=$(echo $modulenames | jq -R 'split(" ") | {include: map({modulename: .})}')
           echo "matrix=$(echo $matrix | jq -c)" >> $GITHUB_OUTPUT
-  
-  build-and-push-image:
+
+  build-and-push-images:
     runs-on: ubuntu-latest
     permissions:
       contents: read
