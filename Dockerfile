@@ -30,3 +30,7 @@ RUN conda config --set channel_priority strict && \
 COPY ${modulename}.yml /tmp
 RUN mamba env create --file /tmp/${modulename}.yml && \
     mamba clean -afy
+
+RUN yes | unminimize || echo "done"
+
+USER $NB_USER
