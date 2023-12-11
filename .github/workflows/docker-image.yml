@@ -8,13 +8,13 @@ name: Docker
 
 on:
   push:
-    branches: [ "master", "*" ]
+    branches: [ "master", "wi24" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths-ignore:
       - 'README.md'
   pull_request:
-    branches: [ "*" ]
+    branches: [ "master", "wi24" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths-ignore:
@@ -25,11 +25,34 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
+  metadata:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }} # contains a list of the module names encoded as json
+      modulenames: ${{ steps.generate-matrix.outputs.modulenames }} # contains a simple, space-separated list of the module names
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: generate matrix
+        id: generate-matrix
+        # adapted from https://stackoverflow.com/a/74829694
+        run: |
+          modulenames="$(ls *.yml | sed 's/.yml//' | paste -s -d ' ')"
+          echo "modulenames=$modulenames" >> $GITHUB_OUTPUT
+          # echo $modulenames | tr ' ' '\n' | sed 's/^/type=gha,scope=builder-/' | paste -s
+          matrix=$(echo $modulenames | jq -R 'split(" ") | {include: map({modulename: .})}')
+          echo "matrix=$(echo $matrix | jq -c)" >> $GITHUB_OUTPUT
+
+  build-and-push-images:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    needs: [metadata]
+    strategy:
+      matrix: ${{ fromJson(needs.metadata.outputs.matrix) }}
 
     steps:
       - name: Checkout repository
@@ -50,15 +73,20 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      
       - name: prune
         run: docker system prune -af
 
       - name: Build and push Docker image
+        id: builder
         uses: docker/build-push-action@v3
         with:
           context: .
+          file: Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.modulename }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            "modulename=${{ matrix.modulename }}"
