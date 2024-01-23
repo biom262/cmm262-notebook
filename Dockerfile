@@ -2,6 +2,8 @@ FROM ucsdets/datahub-base-notebook:2023.1-stable
 
 USER root
 
+ARG modulename
+
 RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' \
     /etc/dpkg/dpkg.cfg.d/excludes
 
@@ -25,44 +27,8 @@ RUN apt-get update && apt-get install -y \
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
-COPY programming-R.yaml /tmp
-RUN mamba env create --file /tmp/programming-R.yaml && \
-    mamba clean -afy
-
-COPY chipseq.yml /tmp
-RUN mamba env create --file /tmp/chipseq.yml && \
-    mamba clean -afy
-
-COPY gwas.yml /tmp
-RUN mamba env create --file /tmp/gwas.yml && \
-    mamba clean -afy
-
-COPY stats.yml /tmp
-RUN mamba env create --file /tmp/stats.yml && \
-    mamba clean -afy
-
-COPY scrna-seq.yml /tmp
-RUN mamba env create --file /tmp/scrna-seq.yml && \
-    mamba clean -afy
-
-COPY imgproc.yml /tmp
-RUN mamba env create --file /tmp/imgproc.yml && \
-    mamba clean -afy
-    
-COPY rna-seq.yaml /tmp
-RUN mamba env create --file /tmp/rna-seq.yaml && \
-    mamba clean -afy
-
-COPY spatial-tx.yml /tmp
-RUN mamba env create --file /tmp/spatial-tx.yml && \
-    mamba clean -afy
-
-COPY variant_calling.yml /tmp
-RUN mamba env create --file /tmp/variant_calling.yml && \
-    mamba clean -afy
-
-COPY networks.yml /tmp
-RUN mamba env create --file /tmp/networks.yml && \
+COPY ${modulename}.yml /tmp
+RUN mamba env create --file /tmp/${modulename}.yml && \
     mamba clean -afy
 
 RUN yes | unminimize || echo "done"
