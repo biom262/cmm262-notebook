@@ -26,11 +26,10 @@ jobs:
       packages: write
 
     steps:
-      - name: Delete untagged versions
+      - name: Delete versions
         uses: actions/delete-package-versions@v4
         with:
           package-name: 'cmm262-notebook'
           package-type: 'container'
           min-versions-to-keep: 30
-          ignore-versions: 'programming-R, stats, rna-seq, scrna-seq, networks, chipseq, gwas, imgproc, popgen, spatial-tx, variant_calling, pr-15'
 
