@@ -8,7 +8,6 @@ dependencies:
 - conda-forge::r-susier==0.12.35
 - conda-forge::r-optparse==1.7.4
 - conda-forge::r-rcolorbrewer==1.1_3
-- conda-forge::r-glmnet==4.1
 - bioconda::plink==1.90b6.21
 - bioconda::gcta==1.94.1
 - dnachun::r-plink2r==1.1
