@@ -8,8 +8,9 @@ dependencies:
   - conda-forge::matplotlib==3.6.3
   - conda-forge::pandas==1.5.3
   - conda-forge::opencv==4.7.0
-  - conda-forge::cellpose==2.0.5
   - conda-forge::scikit-image==0.19.3
   - conda-forge::scanpy==1.9.1
   - conda-forge::squidpy==1.2.2
   - conda-forge::ipykernel==6.21.1
+  - pip:
+    - cellpose==3.0.6
