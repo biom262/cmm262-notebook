@@ -4,6 +4,7 @@ channels:
 - bioconda
 - nodefaults
 dependencies:
+- conda-forge::python=3.8
 - conda-forge::numpy==1.24.2
 - conda-forge::pandas==1.5.3
 - conda-forge::networkx==3.0
