@@ -8,7 +8,7 @@
    Note: **Never** use more one conda environment.yml file for more than one module. Each module should have its own .yml file. Mixing modules into the same environment will make it difficult for future TAs to maintain the environment, since they won't be able to tell which packages to add or remove as the code in the notebooks changes.
 4. Check that the conda environment can still be solved
     ```
-    mamba env create --dry-run --file spatial-tx.yml
+    conda env create --dry-run --file spatial-tx.yml
     ```
 5. Commit and push your changes
 6. Once you're ready, create a pull request to merge it back into the `master` branch
@@ -61,3 +61,6 @@ When possible, you should specify exact package versions and channels to reduce 
     dependencies:
     - conda-forge::ipykernel==6.20.1
     ```
+
+## Other helpful resources
+- https://github.com/ucsd-ets/datahub-example-notebook/blob/main/README.md
