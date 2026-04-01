@@ -22,6 +22,7 @@
     ```
     Otherwise, you can just regenerate the entire `.lock` file from scratch:
     ```
+    conda activate lock
     conda-lock --kind explicit --platform linux-64 --file environment.yml
     ```
 6. Commit and push your changes
