@@ -2,20 +2,34 @@
 
 ## Modifying an environment
 
-1. First, clone this repository
+1. First, create a [GitHub codespace](https://github.com/codespaces/new/biom262/cmm262-notebook?skip_quickstart=true&machine=standardLinux32gb). A GitHub codespace is a pre-configured VSCode development environment that will have all of the necessary tools pre-installed.
+    Instead of a codespace, you can also just clone the repository locally. In that case, you should also make sure to install conda and `conda-lock`.
+    ```
+    conda create -yn lock 'conda-forge::conda-lock'
+    ```
 2. Create a new branch off of the `master` branch. Give it an informative name.
 3. Add the new software to the conda environment used by that module. Make sure to follow best practices (see the section below)!
    Note: **Never** use one conda `environment.yml` file for more than one module. Each module should have its own `.yml` file. Mixing modules into the same environment will make it difficult for future TAs to maintain the environment, since they won't be able to tell which packages to add or remove as the notebooks change.
 4. Check that the conda environment can still be solved
     ```
-    conda env create --dry-run --file spatial-tx.yml
+    conda env create --dry-run --file environment.yml
     ```
-5. Commit and push your changes
-6. Once you're ready, create a pull request to merge it back into the `master` branch
-7. Wait at most 40 minutes for the image to be built and for the checks to pass
-8. You should see a green check-mark if all of the checks pass. If not, click on the red X and then "Details" to view the error message. Add additional commit(s) to fix the issue.
-9. Test your changes (see section below) and add any commits as needed
-10. Once all checks and tests pass, merge your pull request!
+5. Make sure to update the `conda-linux-64.lock` file
+    If you added or modified package, you should update just that package:
+    ```
+    conda activate lock
+    conda-lock --kind explicit --platform linux-64 --file environment.yml --update PACKAGENAME
+    ```
+    Otherwise, you can just regenerate the entire `.lock` file from scratch:
+    ```
+    conda-lock --kind explicit --platform linux-64 --file environment.yml
+    ```
+6. Commit and push your changes
+7. Once you're ready, create a pull request to merge it back into the `master` branch
+8. Wait at most 40 minutes for the image to be built and for the checks to pass
+9. You should see a green check-mark if all of the checks pass. If not, click on the red X and then "Details" to view the error message. Add additional commit(s) to fix the issue.
+10. Test your changes (see section below) and add any commits as needed
+11. Once all checks and tests pass, merge your pull request!
 
 ## Testing a new environment
 **Note**: This section is now outdated. There used to be a way to test actions before they became live. But now any successful changes to the environments (even on an unmerged pull request) will immediately become live on DataHub! This can be dangerous. Use with caution.

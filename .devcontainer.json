@@ -14,7 +14,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "",
+	"postCreateCommand": "conda create -yn lock 'conda-forge::conda-lock'",
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -25,6 +25,8 @@
 				"python.condaPath": "/opt/conda/condabin/conda",
 				"python.terminal.activateEnvironment": true,
 				"python.terminal.activateEnvInCurrentTerminal": true,
+				"python.venvPath": "/opt/conda/envs/base",
+				"python.defaultInterpreterPath": "/opt/conda/envs/base/bin/python",
 				"files.eol": "\n",
 				"git.autofetch": true,
 				"git.enableSmartCommit": true,
