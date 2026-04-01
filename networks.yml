@@ -18,6 +18,6 @@ dependencies:
 - conda-forge::r-igraph==1.2.6
 - r::r-netindices==1.4.4
 - bioconda::bioconductor-org.mm.eg.db==3.10.0
-- conda-forge::r-powerlaw
+- conda-forge::r-powerlaw==0.70.6
 - pip:
   - statannot==0.2.3
