@@ -18,10 +18,10 @@
 10. Once all checks and tests pass, merge your pull request!
 
 ## Testing a new environment
-**Note**: This section is now outdated. There used to be a way to test actions before they become live. But, at the moment, any successful changes to the environments (even on an unmerged pull request) will be immediately live on DataHub! This can be dangerous. Use with caution.
+**Note**: This section is now outdated. There used to be a way to test actions before they became live. But now any successful changes to the environments (even on an unmerged pull request) will immediately become live on DataHub! This can be dangerous. Use with caution.
 
 After creating a pull request for changes to our Dockerfile or a conda environment within our notebook repository, GitHub actions will automatically build an updated Docker image. The image will be tagged by the number assigned to your pull request.
-1. (If off-campus) connect to the UCSD VPN. Then log into DataHub via ssh from your terminal.
+1. (If off-campus) connect to the UCSD VPN. Then log into DataHub via `ssh` from your terminal.
     ```
     ssh username@dsmlp-login.ucsd.edu
     ```
