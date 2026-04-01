@@ -1,24 +1,17 @@
-
 name: Docker
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
 
 on:
   push:
-    branches: [ "master", "wi24" ]
+    branches: [ "master" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths-ignore:
       - 'README.md'
   pull_request:
-    branches: [ "master", "wi24" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    branches: [ "master" ]
     paths-ignore:
       - 'README.md'
+  workflow_dispatch: 
   
 env:
   REGISTRY: ghcr.io
@@ -33,7 +26,7 @@ jobs:
       modulenames: ${{ steps.generate-matrix.outputs.modulenames }} # contains a simple, space-separated list of the module names
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: generate matrix
         id: generate-matrix
@@ -56,21 +49,21 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       
@@ -79,7 +72,7 @@ jobs:
 
       - name: Build and push Docker image
         id: builder
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: Dockerfile
@@ -90,3 +83,10 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             "modulename=${{ matrix.modulename }}"
+
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-digest: ${{ steps.builder.outputs.digest }}
+          push-to-registry: true
