@@ -28,7 +28,7 @@ RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
 COPY ${ENVNAME}/conda-linux-64.lock /tmp
-RUN mamba env create --file /tmp/conda-linux-64.lock && \
+RUN mamba create --file /tmp/conda-linux-64.lock && \
     mamba clean -afy
 
 RUN yes | unminimize || echo "done"
