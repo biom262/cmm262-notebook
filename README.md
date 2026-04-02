@@ -33,8 +33,6 @@
 11. Once all checks and tests pass, merge your pull request!
 
 ## Testing a new environment
-**Note**: This section is now outdated. There used to be a way to test actions before they became live. But now any successful changes to the environments (even on an unmerged pull request) will immediately become live on DataHub! This can be dangerous. Use with caution.
-
 After creating a pull request for changes to our Dockerfile or a conda environment within our notebook repository, GitHub actions will automatically build an updated Docker image. The image will be tagged by the number assigned to your pull request.
 1. (If off-campus) connect to the UCSD VPN. Then log into DataHub via `ssh` from your terminal.
     ```
@@ -42,9 +40,12 @@ After creating a pull request for changes to our Dockerfile or a conda environme
     ```
 2. Run your container on DataHub
     ```
-    launch-scipy-ml.sh -W BNFO262_WIXX_A00 -P Always -i ghcr.io/biom262/cmm262-notebook:pr-#
+    launch-scipy-ml.sh -W BNFO262_WIXX_A00 -P Always -i ghcr.io/biom262/MODULENAME:pr-#
     ```
-    You should replace `#` with the number of the pull request and `XX` with the last two digits of the current year. For example, the number for [this pull request](https://github.com/biom262/cmm262-notebook/pull/11) is 11 and `XX` would be 24 for 2024.
+    Within the above command, you should replace the following:
+    a. `XX` should be replaced with the last two digits of the current year (ex: 24 for 2024)
+    b. `MODULENAME` should be replaced with the module name (ex: chipseq)
+    c. `#` should be replaced with the ID number of the pull request (ex: 11 for [this pull request](https://github.com/biom262/cmm262-notebook/pull/11))
 3. Executing that command will generate a URL to a DataHub environment that uses your updated changes. Open the URL in your browser, and use that notebook environment to test if your changes work as expected. You should rerun your notebooks one more time here -- there's a possibility that they don't work here, even if they worked earlier!
 
     If the URL isn’t working, make sure you connect to the UCSD VPN.
