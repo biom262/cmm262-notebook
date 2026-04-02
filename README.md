@@ -3,8 +3,6 @@ This repository houses the source code for the compute environments used in BNFO
 
 GitHub actions automatically build and push updates to each environment for any commits made to the `master` branch or to a PR that will be merged into `master`. Images from PRs are tagged by their PR number. Only environments which have been changed will be pushed.
 
-This repository is modeled after https://github.com/aryarm/demo-docker-action. Please direct issues and questions to that repository.
-
 ## Our docker images
 Our docker images are pushed to GitHub's container registry, not Docker's. You can find a list of our docker images in [the "Packages" section](https://github.com/orgs/biom262/packages?repo_name=cmm262-notebook) in the right sidebar of this repository.
 
@@ -110,6 +108,6 @@ When possible, you should specify exact package versions and channels to reduce 
     - conda-forge::ipykernel==6.20.1
     ```
 
-## Other helpful resources
-- https://github.com/ucsd-ets/datahub-example-notebook/blob/main/README.md
-- https://github.com/aryarm/demo-docker-action
+## References
+- The steps to test images were taken from DataHub's documentation: https://github.com/ucsd-ets/datahub-example-notebook
+- This repository is modeled after https://github.com/aryarm/demo-docker-action. Please post issues and questions on that repository.
