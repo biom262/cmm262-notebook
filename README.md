@@ -1,4 +1,35 @@
 # BNFO262 notebook environments
+This repository houses the source code for the compute environments used in BNFO 262 at UC San Diego. Each directory in this repository corresponds with a different Docker image. There is one image for each weekly module of the course.
+
+GitHub actions automatically build and push updates to each environment for any commits made to the `master` branch or to a PR that will be merged into `master`. Images from PRs are tagged by their PR number. Only environments which have been changed will be pushed.
+
+This repository is modeled after https://github.com/aryarm/demo-docker-action. Please direct issues and questions to that repository.
+
+## Our docker images
+Our docker images are pushed to GitHub's container registry, not Docker's. You can find a list of our docker images in [the "Packages" section](https://github.com/orgs/biom262/packages?repo_name=cmm262-notebook) in the right sidebar of this repository.
+
+The following container registry URLs can be provided to the DataHub team at the beginning of every academic quarter:
+> ghcr.io/biom262/chipseq:master
+>
+> ghcr.io/biom262/gwas:master
+> 
+> ghcr.io/biom262/imgproc:master
+>
+> ghcr.io/biom262/networks:master
+>
+> ghcr.io/biom262/popgen:master
+> 
+> ghcr.io/biom262/programming-R:master
+>
+> ghcr.io/biom262/rna-seq:master
+>
+> ghcr.io/biom262/scrna-seq:master
+> 
+> ghcr.io/biom262/spatial-tx:master
+>
+> ghcr.io/biom262/stats:master
+>
+> ghcr.io/biom262/variant_calling:master
 
 ## Modifying an environment
 
@@ -34,7 +65,7 @@
 
 ## Testing a new environment
 After creating a pull request for changes to our Dockerfile or a conda environment within our notebook repository, GitHub actions will automatically build an updated Docker image. The image will be tagged by the number assigned to your pull request.
-1. (If off-campus) connect to the UCSD VPN. Then log into DataHub via `ssh` from your terminal.
+1. (If off-campus) connect to the UCSD VPN. Then log into DataHub via `ssh` from your terminal. You may need to enter your UCSD password.
     ```
     ssh username@dsmlp-login.ucsd.edu
     ```
@@ -43,9 +74,9 @@ After creating a pull request for changes to our Dockerfile or a conda environme
     launch-scipy-ml.sh -W BNFO262_WIXX_A00 -P Always -i ghcr.io/biom262/MODULENAME:pr-#
     ```
     Within the above command, you should replace the following:
-    a. `XX` should be replaced with the last two digits of the current year (ex: 24 for 2024)
-    b. `MODULENAME` should be replaced with the module name (ex: chipseq)
-    c. `#` should be replaced with the ID number of the pull request (ex: 11 for [this pull request](https://github.com/biom262/cmm262-notebook/pull/11))
+    - `XX` should be replaced with the last two digits of the current year (ex: `24` for 2024)
+    - `MODULENAME` should be replaced with the module name (ex: `chipseq`)
+    - `#` should be replaced with the ID number of the pull request (ex: `11` for [this pull request](https://github.com/biom262/cmm262-notebook/pull/11))
 3. Executing that command will generate a URL to a DataHub environment that uses your updated changes. Open the URL in your browser, and use that notebook environment to test if your changes work as expected. You should rerun your notebooks one more time here -- there's a possibility that they don't work here, even if they worked earlier!
 
     If the URL isn’t working, make sure you connect to the UCSD VPN.
