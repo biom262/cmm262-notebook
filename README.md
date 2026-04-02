@@ -31,20 +31,27 @@ The following container registry URLs can be provided to the DataHub team at the
 
 ## Modifying an environment
 
-1. First, create a [GitHub codespace](https://github.com/codespaces/new/biom262/cmm262-notebook?skip_quickstart=true&machine=standardLinux32gb). A GitHub codespace is a pre-configured VSCode development environment that will have all of the necessary tools pre-installed.
-    Instead of a codespace, you can also just clone the repository locally. In that case, you should also make sure to install conda and `conda-lock`.
+1. First, click here to create a [GitHub codespace](https://github.com/features/codespaces):
+
+    https://github.com/codespaces/new/biom262/cmm262-notebook?skip_quickstart=true&machine=standardLinux32gb
+
+    A GitHub codespace is a pre-configured VSCode development environment that will have all of the necessary tools pre-installed. Codespaces are free with the [student developer pack](https://education.github.com/pack).
+
+   Instead of a codespace, you can also just clone the repository locally. In that case, you should also make sure to install conda and `conda-lock`.
     ```
     conda create -yn lock 'conda-forge::conda-lock'
     ```
 2. Create a new branch off of the `master` branch. Give it an informative name.
 3. Add the new software to the conda environment used by that module. Make sure to follow best practices (see the section below)!
+
    Note: **Never** use one conda `environment.yml` file for more than one module. Each module should have its own `.yml` file. Mixing modules into the same environment will make it difficult for future TAs to maintain the environment, since they won't be able to tell which packages to add or remove as the notebooks change.
-4. Check that the conda environment can still be solved
+5. Check that the conda environment can still be solved
     ```
     conda env create --dry-run --file environment.yml
     ```
-5. Make sure to update the `conda-linux-64.lock` file
-    If you added or modified package, you should update just that package:
+6. Make sure to update the `conda-linux-64.lock` file
+
+   If you added or modified package, you should update just that package:
     ```
     conda activate lock
     conda-lock --kind explicit --platform linux-64 --file environment.yml --update PACKAGENAME
@@ -54,16 +61,16 @@ The following container registry URLs can be provided to the DataHub team at the
     conda activate lock
     conda-lock --kind explicit --platform linux-64 --file environment.yml
     ```
-6. Commit and push your changes
-7. Once you're ready, create a pull request to merge it back into the `master` branch
-8. Wait at most 40 minutes for the image to be built and for the checks to pass
-9. You should see a green check-mark if all of the checks pass. If not, click on the red X and then "Details" to view the error message. Add additional commit(s) to fix the issue.
-10. Test your changes (see section below) and add any commits as needed
-11. Once all checks and tests pass, merge your pull request!
+8. Commit and push your changes
+9. Once you're ready, create a pull request to merge it back into the `master` branch
+10. Wait at most 30 minutes for the images to be built and for the checks to pass
+11. You should see a green check-mark if all of the checks pass. If not, click on the red X and then "Details" to view the error message. Add additional commit(s) to fix the issue.
+12. Test your changes (see section below) and add any commits as needed
+13. Once all checks and tests pass, merge your pull request!
 
 ## Testing a new environment
-After creating a pull request for changes to our Dockerfile or a conda environment within our notebook repository, GitHub actions will automatically build an updated Docker image. The image will be tagged by the number assigned to your pull request.
-1. (If off-campus) connect to the UCSD VPN. Then log into DataHub via `ssh` from your terminal. You may need to enter your UCSD password.
+Once you create a pull request within our notebook repository, GitHub actions will automatically build an updated set of Docker images. The images will be tagged by the number assigned to your pull request.
+1. (If off-campus) connect to the UCSD VPN. Then log into DataHub via `ssh` from your terminal. You may need to enter your UCSD username/password.
     ```
     ssh username@dsmlp-login.ucsd.edu
     ```
@@ -79,7 +86,7 @@ After creating a pull request for changes to our Dockerfile or a conda environme
 
     If the URL isn’t working, make sure you connect to the UCSD VPN.
 
-    **Note**: If DataHub gives you "Error: ImagePullBackOff", then it probably means that your container image has yet to be pushed to the image repository. You can check the list of available images that have been pushed to the image repository [here](https://github.com/biom262/cmm262-notebook/pkgs/container/cmm262-notebook). If the tag does not appear there, then you will probably need to wait a bit and check back later.
+    **Note**: If DataHub gives you "Error: ImagePullBackOff", then it probably means that your container image has yet to be pushed to the image repository. You can check the list of available images that have been pushed to the image repository [here](https://github.com/orgs/biom262/packages?repo_name=cmm262-notebook). If the `pr-#` tag does not appear there, then you will probably need to wait a bit and check back later.
 
 ## Best practices for conda environments
 ![reproducible_conda_envs](https://github.com/aryarm/demo-docker-action/assets/23412689/791efa84-53dd-4fca-8ea8-8c7029c0528b)
@@ -90,7 +97,7 @@ After creating a pull request for changes to our Dockerfile or a conda environme
 When possible, you should specify exact package versions and channels to reduce the amount of time it takes for conda to find the correct versions and channels to use (aka "solve the environment"). This also makes the `.yml` file much more reproducible and less likely to break in the future. Here's an example where we specify the channel name (_conda-forge_), the package name (_r-base_), and the package version (_3.6.3_):
     ```
     dependencies:
-    - conda-forge::r-base==3.6.3
+      - conda-forge::r-base==3.6.3
     ```
     To pin to exact package versions use a double equals == instead of a single equals = sign.
 5. If a package can be installed via conda, do not specify it as a pip dependency in your environment file. Avoid pip dependencies if possible.
@@ -100,12 +107,12 @@ When possible, you should specify exact package versions and channels to reduce 
 8. If you are creating an environment that should be used from an R notebook, you must also specify the [r-irkernel](https://anaconda.org/conda-forge/r-irkernel) package as a dependency. This allows the environment to be detected by DataHub's [nb_conda_kernels](https://github.com/anaconda/nb_conda_kernels).
     ```
     dependencies:
-    - conda-forge::r-irkernel==1.3.1
+      - conda-forge::r-irkernel==1.3.1
     ```
     Otherwise, if you are creating an environment that should be used from a Python notebook, specify the [ipykernel](https://anaconda.org/conda-forge/ipykernel) package. In either case, be sure to specify a version. I would recommend using [the most recent one](https://anaconda.org/conda-forge/ipykernel) unless the other packages in your environment are too old.
     ```
     dependencies:
-    - conda-forge::ipykernel==6.20.1
+      - conda-forge::ipykernel==6.20.1
     ```
 
 ## References
