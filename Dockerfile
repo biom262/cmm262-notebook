@@ -2,7 +2,7 @@ FROM ucsdets/datahub-base-notebook:stable
 
 USER root
 
-ARG modulename
+ARG ENVNAME
 
 RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man:' \
     /etc/dpkg/dpkg.cfg.d/excludes
@@ -27,8 +27,8 @@ RUN apt-get update && apt-get install -y \
 RUN conda config --set channel_priority strict && \
     mamba install -y -n base -c conda-forge --override-channels bash_kernel nb_conda_kernels
 
-COPY ${modulename}.yml /tmp
-RUN mamba env create --file /tmp/${modulename}.yml && \
+COPY ${ENVNAME}/conda-linux-64.lock /tmp
+RUN mamba env create --file /tmp/${ENVNAME}/conda-linux-64.lock && \
     mamba clean -afy
 
 RUN yes | unminimize || echo "done"

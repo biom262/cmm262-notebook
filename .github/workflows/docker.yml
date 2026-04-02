@@ -2,50 +2,57 @@ name: Docker
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths-ignore:
       - 'README.md'
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
     paths-ignore:
       - 'README.md'
-  workflow_dispatch: 
-  
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
-  metadata:
+  get_dirs:
+    name: Get directory names
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.generate-matrix.outputs.matrix }} # contains a list of the module names encoded as json
-      modulenames: ${{ steps.generate-matrix.outputs.modulenames }} # contains a simple, space-separated list of the module names
+      matrix: ${{ steps.output-dirs.outputs.matrix }} # contains a list of the module names encoded as a json array
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: generate matrix
-        id: generate-matrix
-        # adapted from https://stackoverflow.com/a/74829694
+      - name: get directory names
+        id: output-dirs
+        # adapted from https://stackoverflow.com/a/71687652
         run: |
-          modulenames="$(ls *.yml | sed 's/.yml//' | paste -s -d ' ')"
-          echo "modulenames=$modulenames" >> $GITHUB_OUTPUT
-          # echo $modulenames | tr ' ' '\n' | sed 's/^/type=gha,scope=builder-/' | paste -s
-          matrix=$(echo $modulenames | jq -R 'split(" ") | {include: map({modulename: .})}')
-          echo "matrix=$(echo $matrix | jq -c)" >> $GITHUB_OUTPUT
+          matrix=$(ls -d */ | jq --raw-input --slurp --compact-output 'split("/\n")[:-1]')
+          echo "$matrix"
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
-  build-and-push-images:
+  build-and-push:
+    needs: get_dirs
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    needs: [metadata]
+      attestations: write
+      id-token: write
     strategy:
-      matrix: ${{ fromJson(needs.metadata.outputs.matrix) }}
+      fail-fast: false
+      matrix:
+        name: [github] # list the names of additional container registries here
+        # retrieves the environment names dynamically
+        envname: ${{ fromJson(needs.get_dirs.outputs.matrix) }}
+        include:
+          -
+            name: github
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: GITHUB_TOKEN
+          # you can list other container registries here, as well
+          # https://github.com/docker/login-action?tab=readme-ov-file#about
 
     steps:
       - name: Checkout repository
@@ -54,9 +61,9 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v4
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ matrix.registry }}
+          username: ${{ matrix.username }}
+          password: ${{ secrets[matrix.password] }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -65,28 +72,51 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      
+          images: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ matrix.envname }}
+
       - name: prune
         run: docker system prune -af
 
-      - name: Build and push Docker image
-        id: builder
+      - name: Build and export to Docker
         uses: docker/build-push-action@v7
+        id: build
+        if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }} # only if a test.sh file exists
         with:
           context: .
-          file: Dockerfile
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.modulename }}
+          load: true # copied from https://docs.docker.com/build/ci/github-actions/test-before-push
+          file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '') && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            "modulename=${{ matrix.modulename }}"
+            "ENVNAME=${{ matrix.envname }}"
+      
+      - name: Test before push
+        if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }} # only if a test.sh file exists
+        # This command was adapted from
+        # https://docs.docker.com/engine/reference/commandline/run#volume and
+        # https://github.com/broadinstitute/cromwell/blob/ec1f3ac0/cromwell.example.backends/Docker.conf#L25
+        run: |
+          docker run --rm -v ./${{ matrix.envname }}:/${{ matrix.envname }} -w /${{ matrix.envname }} -i ${{ steps.meta.outputs.tags }} ./test.sh
+
+      - name: Push to Docker
+        id: push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '') && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            "ENVNAME=${{ matrix.envname }}"
 
       - name: Generate artifact attestation
         uses: actions/attest@v4
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.builder.outputs.digest }}
+          subject-name: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ matrix.envname }}
+          subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
