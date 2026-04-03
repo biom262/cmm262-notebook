@@ -51,7 +51,7 @@ The following container registry URLs can be provided to the DataHub team at the
     ```
 6. Make sure to update the `conda-linux-64.lock` file
 
-   If you added or modified package, you should update just that package:
+   If you added or modified a package, you should update just that package:
     ```
     conda activate lock
     conda-lock --kind explicit --platform linux-64 --file environment.yml --update PACKAGENAME
