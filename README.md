@@ -1,7 +1,7 @@
 # BNFO262 notebook environments
 This repository houses the source code for the compute environments used in BNFO 262 at UC San Diego. Each directory in this repository corresponds with a different Docker image. There is one image for each weekly module of the course.
 
-GitHub actions automatically build and push updates to each environment for any commits made to the `master` branch or to a PR that will be merged into `master`. Images from PRs are tagged by their PR number. Only environments which have been changed will be pushed.
+GitHub actions automatically build and push updates to each environment for any commits made to the `master` branch or to a PR that will be merged into `master`. Images from PRs are tagged by their PR number.
 
 ## Our docker images
 Our docker images are pushed to GitHub's container registry, not Docker's. You can find a list of our docker images in [the "Packages" section](https://github.com/orgs/biom262/packages?repo_name=cmm262-notebook) in the right sidebar of this repository.
