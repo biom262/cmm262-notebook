@@ -45,7 +45,7 @@ The following container registry URLs can be provided to the DataHub team at the
 3. Add the new software to the conda environment used by that module. Make sure to follow best practices (see the section below)!
 
    Note: **Never** use one conda `environment.yml` file for more than one module. Each module should have its own `.yml` file. Mixing modules into the same environment will make it difficult for future TAs to maintain the environment, since they won't be able to tell which packages to add or remove as the notebooks change.
-5. Check that the conda environment can still be solved
+5. Check that the conda environment can still be solved by doing a dry-run
     ```
     conda env create --dry-run --file environment.yml
     ```
@@ -99,7 +99,7 @@ When possible, you should specify exact package versions and channels to reduce 
     dependencies:
       - conda-forge::r-base==3.6.3
     ```
-    To pin to exact package versions use a double equals == instead of a single equals = sign.
+    To pin to exact package versions use a double equals == instead of a single equals = sign. If you aren't sure which versions to specify, you can do a dry run without versions and then choose whichever versions are chosen by the dry run.
 5. If a package can be installed via conda, do not specify it as a pip dependency in your environment file. Avoid pip dependencies if possible.
 6. Do not include dependencies of any packages already listed in your environment file unless you import or use those dependencies in your own code.
     For example, if you use `scanpy` and it imports `pytables`, you shouldn't add `pytables` to your conda environment file unless you directly import and use `pytables` in your code. This rule helps to ensure `.yml` file can be easily updated in future years.
