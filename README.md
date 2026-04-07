@@ -99,7 +99,7 @@ When possible, you should specify exact package versions and channels to reduce 
     dependencies:
       - conda-forge::r-base==3.6.3
     ```
-    To pin to exact package versions use a double equals == instead of a single equals = sign. If you aren't sure which versions to specify, you can do a dry run without versions and then choose whichever versions are chosen by the dry run.
+    To pin to exact package versions, use a double equals `==` instead of a single equals `=` sign. If you aren't sure which versions to specify, you can do a dry run without versions and then choose whichever versions are chosen by the dry run.
 5. If a package can be installed via conda, do not specify it as a pip dependency in your environment file. Avoid pip dependencies if possible.
 6. Do not include dependencies of any packages already listed in your environment file unless you import or use those dependencies in your own code.
     For example, if you use `scanpy` and it imports `pytables`, you shouldn't add `pytables` to your conda environment file unless you directly import and use `pytables` in your code. This rule helps to ensure `.yml` file can be easily updated in future years.
