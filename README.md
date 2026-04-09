@@ -92,11 +92,11 @@ Once you create a pull request within our notebook repository, GitHub actions wi
 ![reproducible_conda_envs](https://github.com/aryarm/demo-docker-action/assets/23412689/791efa84-53dd-4fca-8ea8-8c7029c0528b)
 1. **[Write your environment file manually](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#create-env-file-manually)**. Don't create an environment and then export it to a `.yml` file using `conda env export`. This will inevitably create `.yml` files that cannot be easily updated in future years. Also, the `.yml` file will be unlikely to work with other environments besides your own (or other _base_ Docker images besides the one from which you exported it) because of the inclusion of system-level packages.
 
-   You can try to avoid system-level packages by providing the `--from-history` or `--no-builds` flags but then you're likely to get dependency conflicts. And even then, the file will probably still need lots of manual fixing to follow the rest of the best practices. There is simply no replacement to a manually written file.
+   You can try to avoid system-level packages by providing the `--from-history --no-builds` flags but then you're likely to get dependency conflicts. And even then, the file will probably still need lots of manual fixing to follow the rest of the best practices. There is simply no replacement to a manually written file.
 2. You should only use packages from community-driven, open-source channels like `conda-forge` and `bioconda`. Other channels (like `anaconda`, `r`, and `defaults`) have been known to eventually purge old packages, breaking existing `.yml` files.
 3. Always specify `conda-forge` before `bioconda` in the channels list. Note that `conda-forge` is needed whenever `bioconda` is needed, but the opposite is not true.
 4. You should always specify `nodefaults` as a channel in the channels list, since the `defaults` channel [conflicts with](https://conda-forge.org/docs/user/transitioning_from_defaults) `conda-forge`.
-5. You should specify exact package versions and channels to reduce the amount of time it takes for conda to find the correct versions and channels to use (aka "solve the environment"). This also makes the `.yml` file much more reproducible and less likely to break in the future.
+5. You should specify exact package versions and channels to reduce the amount of time it takes for conda to find the correct versions and channels (aka "solve the environment"). This also makes the `.yml` file much more reproducible and less likely to break in the future.
 
    Here's an example where we specify the channel name (_conda-forge_), the package name (_r-base_), and the package version (_3.6.3_):
     ```
