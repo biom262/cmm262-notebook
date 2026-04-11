@@ -5,35 +5,43 @@ on:
     branches: [ "master" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
-    paths-ignore:
-      - 'README.md'
-      - '.devcontainer.json'
   pull_request:
     branches: [ "master" ]
-    paths-ignore:
-      - 'README.md'
-      - '.devcontainer.json'
 
 jobs:
   # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
   get_dirs:
-    name: Get directory names
+    name: List changed images
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    strategy:
+      fail-fast: true
     outputs:
       matrix: ${{ steps.output-dirs.outputs.matrix }} # contains a list of the module names encoded as a json array
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: List changed packages
+        id: filter
+        uses: dorny/paths-filter@v4
+        with:
+          list-files: shell
+          filters: |
+            changed:
+              - added|modified: '**/conda-linux-64.lock'
+
       - name: get directory names
         id: output-dirs
         # adapted from https://stackoverflow.com/a/71687652
         run: |
-          matrix=$(ls */conda-linux-64.lock | sed 's+/conda-linux-64.lock++' | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')
+          matrix=$(for i in ${{ steps.filter.outputs.changed_files }}; do sed 's+/conda-linux-64.lock++' <<< $i; done | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')
           echo "$matrix"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   build-and-push:
+    name: Build ${{ matrix.envname }}
     needs: get_dirs
     runs-on: ubuntu-latest
     permissions:
@@ -122,3 +130,24 @@ jobs:
           subject-name: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ matrix.envname }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+  all-green:
+    name: All checks
+    needs: [get_dirs, build-and-push]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any image could not be built
+        run: |
+          # Succeed when there are no images to build (matrix == [])
+          if [ "${{ needs.get_dirs.outputs.matrix }}" = "[]" ]; then
+            echo "No changed images detected; skipping failure checks."
+            exit 0
+          fi
+
+          # Otherwise require the matrix build job to be successful.
+          # (When the matrix is empty, build-and-push is typically 'skipped', handled above.)
+          if [ "${{ needs.build-and-push.result }}" != "success" ]; then
+            echo "build-and-push result: ${{ needs.build-and-push.result }}"
+            exit 1
+          fi
