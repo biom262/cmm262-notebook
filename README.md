@@ -1,10 +1,10 @@
-# BNFO262 notebook environments
+# BNFO 262 notebook environments
 This repository houses the source code for the compute environments used in BNFO 262 at UC San Diego. Each directory in this repository corresponds with a different Docker image. There is one image for each weekly module of the course.
 
-GitHub actions automatically build and push updates to each environment for any commits made to the `master` branch or to a PR that will be merged into `master`. Images from PRs are tagged by their PR number.
+GitHub Actions automatically build and push updates to each environment for any commits made to the `master` branch or to a PR that will be merged into `master`. Images from PRs are tagged by their PR number.
 
-## Our docker images
-Our docker images are pushed to GitHub's container registry, not Docker's. You can find a list of our docker images in [the "Packages" section](https://github.com/orgs/biom262/packages?repo_name=cmm262-notebook) in the right sidebar of this repository.
+## Our Docker images
+Our Docker images are pushed to GitHub's container registry, not Docker's. You can find a list of our Docker images in [the "Packages" section](https://github.com/orgs/biom262/packages?repo_name=cmm262-notebook) in the right sidebar of this repository.
 
 The following container registry URLs can be provided to the DataHub team at the beginning of every academic quarter:
 > ghcr.io/biom262/chipseq:master
@@ -45,11 +45,11 @@ The following container registry URLs can be provided to the DataHub team at the
 3. Add the new software to the conda environment used by that module. Make sure to follow best practices (see the section below)!
 
    Note: **Never** use one conda `environment.yml` file for more than one module. Each module should have its own `.yml` file. Mixing modules into the same environment will make it difficult for future TAs to maintain the environment, since they won't be able to tell which packages to add or remove as the notebooks change.
-5. Check that the conda environment can still be solved by doing a dry-run
+4. Check that the conda environment can still be solved by doing a dry-run
     ```
     conda env create --dry-run --file environment.yml
     ```
-6. Make sure to update the `conda-linux-64.lock` file
+5. Make sure to update the `conda-linux-64.lock` file
 
    If you added or modified a package, you should update just that package:
     ```
@@ -61,15 +61,15 @@ The following container registry URLs can be provided to the DataHub team at the
     conda activate lock
     conda-lock --kind explicit --platform linux-64 --file environment.yml
     ```
-8. Commit and push your changes
-9. Once you're ready, create a pull request to merge it back into the `master` branch
-10. Wait at most 30 minutes for the images to be built and for the checks to pass
-11. You should see a green check-mark if all of the checks pass. If not, click on the red X and then "Details" to view the error message. Add additional commit(s) to fix the issue.
-12. Test your changes (see section below) and add any commits as needed
-13. Once all checks and tests pass, merge your pull request!
+6. Commit and push your changes
+7. Once you're ready, create a pull request to merge it back into the `master` branch
+8. Wait up to 30 minutes for the images to be built and for the checks to pass
+9. You should see a green check mark if all of the checks pass. If not, click on the red X and then "Details" to view the error message. Add additional commit(s) to fix the issue.
+10. Test your changes (see section below) and add any commits as needed
+11. Once all checks and tests pass, merge your pull request!
 
 ## Testing a new environment
-Once you create a pull request within our notebook repository, GitHub actions will automatically build an updated set of Docker images. The images will be tagged by the number assigned to your pull request.
+Once you create a pull request within our notebook repository, GitHub Actions will automatically build an updated set of Docker images. The images will be tagged by the number assigned to your pull request.
 1. If off-campus, connect to [the UCSD VPN](https://blink.ucsd.edu/technology/network/connections/off-campus/VPN) first. Then log into DataHub via `ssh` from your laptop's terminal. You will need to enter your UCSD username/password.
     ```
     ssh USERNAME@dsmlp-login.ucsd.edu
