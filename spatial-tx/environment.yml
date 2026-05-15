@@ -12,5 +12,4 @@ dependencies:
   - conda-forge::scanpy==1.9.1
   - conda-forge::squidpy==1.2.2
   - conda-forge::ipykernel==6.21.1
-  - pip:
-    - cellpose==3.0.6
+  - conda-forge::cellpose==3.0.8
